@@ -10,7 +10,7 @@ client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect((TCP_IP, TCP_PORT))
 l="Connection is Up and Running"
 client.send(l.encode())
-data = client.accept(BUFFER_SIZE).decode()
+data = client.recv(BUFFER_SIZE).decode()
 # client.close()
 print("test")
 def on_release(key):
