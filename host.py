@@ -15,15 +15,12 @@ s.listen(5)
 print('Waiting for a connection.')
 
 def threaded_client(conn):
-    reply = ''
     while True:
-        data = conn.recv(64)
-        reply = reply + data.decode('utf-8')
+        data = conn.recv(256)
+        data = data.decode('utf-8')
         # client.send(reply.encode())
-        print("sad")
-        print(reply)
+        print(data)
         if not data:
-            print('someone left')
             break
 
     conn.close()
@@ -31,6 +28,6 @@ def threaded_client(conn):
 while True:
 
     conn, addr = s.accept()
-    print('connected to: '+addr[0]+':'+str(addr[1]))
+    # print('connected to: '+addr[0]+':'+str(addr[1]))
 
     start_new_thread(threaded_client,(conn,))
