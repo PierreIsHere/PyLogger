@@ -8,19 +8,12 @@ client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect((TCP_IP, TCP_PORT))
 
 
-# l="hello"
-# print(l)
-
-l="Connection is Up and Running"
-l = l.replace(" ","_")
-client.send(l.encode())
-data = client.accept(BUFFER_SIZE).decode()
+l="Connection is Up and Running \n"
 
 client.send(l.encode())
-# print(client.send(l.encode()))
-data = client.accept(BUFFER_SIZE).decode()
-# print("received data:", data)
-client.send(l.encode())
-# print(client.send(l.encode()))
-data = client.accept(BUFFER_SIZE).decode()
-client.close()
+
+# client.send(l.encode())
+
+# client.send(l.encode())
+
+client.close  ()

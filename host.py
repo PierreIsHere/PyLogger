@@ -17,17 +17,15 @@ print('Waiting for a connection.')
 def threaded_client(conn):
     reply = ''
     while True:
-        data = conn.recv(2048)
+        data = conn.recv(64)
         reply = reply + data.decode('utf-8')
+        # client.send(reply.encode())
+        print("sad")
         print(reply)
         if not data:
             print('someone left')
             break
-        
-        if data.decode('utf-8') == '\r\n':
-            conn.sendall(str.encode('Server output: '+reply))
-            print(reply)
-            reply = ''
+
     conn.close()
 
 while True:
