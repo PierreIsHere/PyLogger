@@ -3,10 +3,10 @@ import sys
 from _thread import *
 
 host = ''
-port = 8099
+port = 7878
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-try:
+try: 
     s.bind((host, port))
 except socket.error as e:
     print(str(e))
@@ -18,12 +18,7 @@ def threaded_client(conn):
     while True:
         data = conn.recv(124)
         data = data.decode('utf-8')
-        # if len(data) > 0:
-        # client.send(reply.encode())
-        # print(str(data.decode('utf-8'))
-        # print(data)
         print(data)
-        print("it works")
         if not data:
             break
 
@@ -32,6 +27,4 @@ def threaded_client(conn):
 while True:
 
     conn, addr = s.accept()
-    # print('connected to: '+addr[0]+':'+str(addr[1]))
-
     start_new_thread(threaded_client,(conn,))
